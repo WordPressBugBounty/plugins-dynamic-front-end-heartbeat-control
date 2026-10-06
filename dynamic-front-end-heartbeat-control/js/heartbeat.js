@@ -389,38 +389,42 @@
   }
 
   function cleanup() {
-    relinquishLeadership();
-    if (bc && typeof bc.close === 'function') {
-      try { bc.close(); } catch {}
-    }
+  relinquishLeadership();
+  if (bc && typeof bc.close === 'function') {
+    try { bc.close(); } catch {}
+  }
+}
+
+ document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) nextRetryAt = 0;
+});
+window.addEventListener('online', () => { nextRetryAt = 0; });
+window.addEventListener('pageshow', (e) => { if (e && e.persisted) nextRetryAt = 0; });
+window.addEventListener('pagehide', cleanup, { once: true });
+window.addEventListener('beforeunload', cleanup, { once: true });
+
+document.addEventListener('DOMContentLoaded', () => {
+  maybeResetMemo();
+  if (String(vars.heartbeat_control_enabled || '') !== '1') return;
+
+  const nonce = vars.nonce;
+
+  const startHeartbeat = () => {
+    void heartbeat.init(nonce).catch(() => {});
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(startHeartbeat, { timeout: 500 });
+  } else {
+    setTimeout(startHeartbeat, 150);
   }
 
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) nextRetryAt = 0;
-  });
-  window.addEventListener('online', () => { nextRetryAt = 0; });
-  window.addEventListener('pageshow', (e) => { if (e && e.persisted) nextRetryAt = 0; });
-  window.addEventListener('pagehide', cleanup, { once: true });
-  window.addEventListener('beforeunload', cleanup, { once: true });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    maybeResetMemo();
-    if (String(vars.heartbeat_control_enabled || '') !== '1') return;
-
-    const nonce = vars.nonce;
-
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(() => heartbeat.init(nonce), { timeout: 500 });
-    } else {
-      setTimeout(() => heartbeat.init(nonce), 150);
-    }
-
-    const sel = document.querySelector('#dfehc-heartbeat-interval');
-    if (sel) {
-      sel.addEventListener('change', function () {
-        const val = parseInt(String(this.value), 10);
-        if (!Number.isNaN(val)) heartbeat.update(Math.min(Math.max(val, MIN), MAX));
-      });
-    }
-  });
+  const sel = document.querySelector('#dfehc-heartbeat-interval');
+  if (sel) {
+    sel.addEventListener('change', function () {
+      const val = parseInt(String(this.value), 10);
+      if (!Number.isNaN(val)) heartbeat.update(Math.min(Math.max(val, MIN), MAX));
+    });
+  }
+});
 })(window.wp || {});

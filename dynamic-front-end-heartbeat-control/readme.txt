@@ -1,8 +1,8 @@
 Dynamic Front-End Heartbeat Control
 Requires at least: 5.5
-Tested up to:      7.0
+Tested up to:      7.1
 Requires PHP:      7.2
-Stable tag:        1.2.998.1
+Stable tag:        1.2.998.2
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Tags:              performance, heartbeat, site health, admin-ajax, heartbeat api
@@ -66,12 +66,19 @@ Not at all. This plugin is built to enhance your website’s performance and is 
 
 Even if both are enabled, your website will not crash. However, to ensure the heartbeat frequency remains dynamically managed, avoid enabling or configuring manual heartbeat frequency settings in other caching or performance plugins while using this plugin.
 
+= What should I do if my heartbeat status shows as Under Strain? =
+Check your current server or hosting plan’s CPU and memory usage. High CPU usage or insufficient hosting resources are usually the main causes. If your website is consistently exceeding the available resources, you may need to optimize the website or consider upgrading your hosting plan.
+
 == Screenshots ==
 
 1. Dashboard status widget
 2. Settings > DFEHC
 
 == Changelog ==
+
+= 1.2.998.2 =
+
+* Bug fixes.
 
 = 1.2.998.1 =
 

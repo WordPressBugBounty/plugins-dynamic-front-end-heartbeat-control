@@ -3,7 +3,7 @@
 Plugin Name: Dynamic Front-End Heartbeat Control
 Plugin URI: https://heartbeat.support
 Description: An enhanced solution to optimize the performance of your WordPress website. Stabilize your website's load averages and enhance the browsing experience for visitors during high-traffic fluctuations. 
-Version: 1.2.998.1
+Version: 1.2.998.2
 Author: Codeloghin
 Author URI: https://codeloghin.com
 License: GPL2
